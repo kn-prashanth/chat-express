@@ -20,6 +20,7 @@ export async function getChatMessages(chatId: string): Promise<Message[]> {
       .from("messages")
       .select("id, senderId, text, timestamp")
       .eq("chatId", chatId)
+      .eq('isdeleted', false)
       .order("timestamp", { ascending: false });
 
     if (error) {
@@ -34,6 +35,7 @@ export async function getChatMessages(chatId: string): Promise<Message[]> {
     }
     const messages = messageArrayValidator.parse(data);
     return messages || [];
+
   } catch (error) {
     console.error("Error fetching messages:", error);
     console.log(39, error);

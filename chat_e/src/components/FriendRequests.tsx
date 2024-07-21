@@ -1,6 +1,8 @@
 "use client";
 
 import { db } from "@/lib/db";
+import { pusherClient } from "@/lib/pusher";
+import { toPusherKey } from "@/lib/utils";
 import axios from "axios";
 import { Check, UserPlus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,41 +19,30 @@ const FriendRequests: FC<FriendRequestsProps> = ({
 }) => {
   const router = useRouter();
   const [friendRequests, setFriendRequests] = useState(incomingFriendRequests);
+
   useEffect(() => {
-    const channel = db.channel(
-      `public:friend_requests:receiver_id=eq.${sessionId}`
-    );
+    pusherClient.subscribe(
+      toPusherKey(`user:${sessionId}:friend_requests`)
+    )
+    console.log("listening to ", `user:${sessionId}:friend_requests`)
 
-    channel
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "friend_requests",
-          filter: `receiver_id=eq.${sessionId}`,
-        },
-        async (payload) => {
-          const senderId = payload.new.sender_id;
+    const friendRequestHandler = async ({ senderData }) => {
+      setFriendRequests((prev) =>
+        [senderData, ...prev]
+      );
+      console.log("function got called", senderData)
+    }
 
-          const { data: sender, error } = await axios
-            .get(`/api/users/${senderId}`)
-            .then((res) => res.data);
+    pusherClient.bind('friend_requests', friendRequestHandler)
 
-          if (error) {
-            console.error("Error fetching sender data:", error);
-            return;
-          }
-          setFriendRequests((prev) => [...prev, { senderId, sender }]);
-        }
-      )
-      .subscribe();
-
-    // Cleanup subscription on component unmount
     return () => {
-      db.removeChannel(channel);
-    };
-  }, [sessionId]);
+      pusherClient.unsubscribe(
+        toPusherKey(`user:${sessionId}:riend_requests`)
+      )
+      pusherClient.unbind('friend_requests', friendRequestHandler)
+    }
+
+  }, [sessionId])
 
   const acceptFriend = async (id: Number) => {
     console.log("accept friend-->", id);

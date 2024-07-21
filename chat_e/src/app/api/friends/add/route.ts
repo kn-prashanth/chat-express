@@ -45,7 +45,7 @@ export async function POST(req: Request) {
         status: 400,
       });
     }
-    const response = await sendFriendRequest(session.user.id, idToAdd)
+    const response = await sendFriendRequest(session.user.id, idToAdd, session.user.name || "")
     
     if (response) {
         return new Response(response.message, {status: response.statusCode});

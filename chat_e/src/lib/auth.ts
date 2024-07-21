@@ -36,11 +36,6 @@ export const authOptions: NextAuthOptions = {
           .select("*")
           .eq("username", username)
           .single();
-        // console.log("data-------------->");
-        // console.log(data);
-
-        // console.log("error-------------->");
-        // console.log(error);
 
         if (error) {
           throw new Error("Invalid username or password");
@@ -50,7 +45,6 @@ export const authOptions: NextAuthOptions = {
           password,
           data.password_hash
         );
-        // console.log("validPassword-----_>", validPassword);
         
         if (!validPassword) {
           throw new Error("Invalid username or password"+ JSON.stringify(data));
@@ -87,7 +81,6 @@ export const authOptions: NextAuthOptions = {
         token.name = dbUser?.name;
         token.picture = dbUser?.image;
       }
-      // console.log("token", token);
       return token;
     },
     async session({ session, token }) {
@@ -102,14 +95,13 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    // async session({session, token}) {
-    //   session.user.id = token.id;
-    //   return session;
-    // },
-    redirect() {
-      console.log("redirect");
+    redirect({ url, baseUrl }) {
+      console.log("redirect:url", url);
+      console.log("edirect:baseUrl", baseUrl);
       
-      return '/dashboard'
+      
+      if (url.startsWith(baseUrl)) return url;
+      return baseUrl;
     },
   },
 };

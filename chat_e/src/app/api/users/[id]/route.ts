@@ -17,10 +17,6 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 
   if (error) {
     return res.status(500).json({ error: error.message });
-  }
-  console.log("users/[id]");
-  
-  console.log(data);
-  
+  }  
   return res.status(200).json(data);
 }

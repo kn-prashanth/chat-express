@@ -1,6 +1,8 @@
 "use client";
 
 import { db } from "@/lib/db";
+import { pusherClient } from "@/lib/pusher";
+import { toPusherKey } from "@/lib/utils";
 import { User } from "lucide-react";
 import Link from "next/link";
 import { FC, useEffect, useState } from "react";
@@ -13,49 +15,24 @@ interface FriendRequestSidebarOptionsProps {
 const FriendRequestSidebarOptions: FC<FriendRequestSidebarOptionsProps> = ({
   sessionId,
   initialUnseenRequestCount,
-}) => {    
+}) => {
   const [unseenRequestCount, setUnseenRequestCount] = useState<number>(
     initialUnseenRequestCount
   );
 
   useEffect(() => {
-    // Subscribe to incoming friend requests
-    const incomingFriendRequestsSubscription = db
-      .channel(`friend_requests:receiver_id=eq.${sessionId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "friend_requests",
-          filter: `receiver_id=eq.${sessionId}`,
-        },
-        (payload) => {
-          setUnseenRequestCount((prev) => prev + 1);
-        }
-      )
-      .subscribe();
+    pusherClient.subscribe(toPusherKey(`user:${sessionId}:friend_requests`));
+    console.log("listening to ", `user:${sessionId}:friend_requests`);
 
-    // Subscribe to new friends
-    const newFriendsSubscription = db
-      .channel(`friends:friend_id=eq.${sessionId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "friends",
-          filter: `friend_id=eq.${sessionId}`,
-        },
-        (payload) => {
-          setUnseenRequestCount((prev) => prev - 1);
-        }
-      )
-      .subscribe();
+    const friendRequestHandler = async ({}) => {
+      setUnseenRequestCount((prev) => prev + 1);
+    };
+
+    pusherClient.bind("friend_requests", friendRequestHandler);
 
     return () => {
-      db.removeChannel(incomingFriendRequestsSubscription);
-      db.removeChannel(newFriendsSubscription);
+      pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:riend_requests`));
+      pusherClient.unbind("friend_requests", friendRequestHandler);
     };
   }, [sessionId]);
 

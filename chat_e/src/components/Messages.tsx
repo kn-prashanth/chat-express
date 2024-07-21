@@ -1,10 +1,11 @@
 "use client";
 import { FC, useEffect, useRef, useState } from "react";
-import { format } from 'date-fns'
-import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { cn, toPusherKey } from "@/lib/utils";
 import Image from "next/image";
 import { db } from "@/lib/db";
 import { Message } from "@/lib/validations/message";
+import { pusherClient } from "@/lib/pusher";
 
 interface MessagesProps {
   initialMessages: Message[];
@@ -24,29 +25,36 @@ const Messages: FC<MessagesProps> = ({
   const [messages, setMessages] = useState<Message[]>(initialMessages);
 
   useEffect(() => {
-  const channel = db
-      .channel(`public:messages`)
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'messages',
-        filter: `chatId=eq.${chatId}`
-      }, (payload) => {
-        const newMessage = payload.new as Message;
-        setMessages((prev) => [newMessage, ...prev]);
-      })
-      .subscribe();
+    pusherClient.subscribe(
+      toPusherKey(`chat:${chatId}`)
+    )
+    console.log("listening to ", `user:${sessionId}:friend_requests`)
+
+    const messageHandler = async (message: Message) => {
+      setMessages((prev) =>
+        [message, ...prev]
+      );
+      console.log("function got called", message)
+    }
+
+    pusherClient.bind('incoming_message', messageHandler)
 
     return () => {
-      db.removeChannel(channel);
-    };
-  }, [chatId]);
+      pusherClient.unsubscribe(
+        toPusherKey(`chat:${chatId}`)
+      )
+      pusherClient.unbind('incoming_message', messageHandler)
+    }
 
-  const scrollDownRef = useRef<HTMLDivElement | null>(null)
+  }, [chatId])
 
-  const formatTimestamp = (timestamp: number) => {
-    return format(timestamp, 'HH:mm')
-  }
+  const scrollDownRef = useRef<HTMLDivElement | null>(null);
+
+  const formatTimestamp = (timestamp: string) => {
+    console.log("timestamp-->", timestamp);
+    
+    return format(timestamp, "HH:mm");
+  };
 
   return (
     <div
@@ -56,7 +64,7 @@ const Messages: FC<MessagesProps> = ({
       <div ref={scrollDownRef} />
 
       {messages.map((message, index) => {
-        const isCurrentUser = message.senderId === sessionId;
+        const isCurrentUser = message.senderId == sessionId;
 
         const hasNextMessageFromSameUser =
           messages[index - 1]?.senderId === messages[index].senderId;
@@ -91,7 +99,7 @@ const Messages: FC<MessagesProps> = ({
                   })}
                 >
                   {message.text}{" "}
-                  <span className="ml-2 text-xs text-gray-400">
+                  <span className="ml-2 text-xs text-white-400">
                     {formatTimestamp(message.timestamp)}
                   </span>
                 </span>

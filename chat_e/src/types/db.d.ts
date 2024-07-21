@@ -1,5 +1,5 @@
 interface User {
-    id: string;
+    id: number;
     name: string;
     email: string;
     image: string;
@@ -9,8 +9,8 @@ interface User {
 }
 
 interface Message {
-    id: string;
-    senderId: string;
+    id: number;
+    senderId: number;
     text: string;
     timestamp: number;  // Use string for timestamps
   }
@@ -21,7 +21,7 @@ interface Chat {
 }
 
 interface FriendRequest {
-    id: string
-    senderId: string
-    receiverId: string
+    id: number
+    senderId: number
+    receiverId: number
 }

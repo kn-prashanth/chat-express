@@ -1,3 +1,5 @@
+import { pusherServer } from "@/lib/pusher";
+import { toPusherKey } from "@/lib/utils";
 import { createClient } from "@supabase/supabase-js";
 
 const nextPublicSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -31,12 +33,14 @@ const isFriendRequestExist = async function (
   }
   return data;
 };
-export async function sendFriendRequest(senderId: string, receiverId: string) {
-
+export async function sendFriendRequest(
+  senderId: string,
+  receiverId: string,
+) {
   const isFriend = await isAlreadyFriend(senderId, receiverId);
 
   console.log("isFriend", isFriend);
-  
+
   if (isFriend.length > 0) {
     return {
       message: "You cannot send friend request to who is already your friend",
@@ -55,6 +59,26 @@ export async function sendFriendRequest(senderId: string, receiverId: string) {
       statusCode: 400,
     };
   }
+
+  const { data: senderData, error: error2 } = await db
+    .from('users')
+    .select('*')
+    .eq('id', senderId)
+    .single();
+
+  if (error2) {
+    throw new Error(error2.message);
+  }  
+
+  //valid request, send friend request
+
+  pusherServer.trigger(
+    toPusherKey(`user:${receiverId}:friend_requests`),
+    "friend_requests",
+    {
+      senderData: senderData,
+    }
+  );
 
   const { data, error } = await db
     .from("friend_requests")

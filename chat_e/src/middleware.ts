@@ -8,13 +8,15 @@ export default withAuth(async function middleware(req) {
   //Manage route protection
   const isAuth = await getToken({ req });
   const isLoginPage = pathname.startsWith("/login");
+  const isSignup = pathname.startsWith("/signup");
+
 
   const sensitiveRoutes = ["/dashboard"];
   const isAccessingSensitiveRoute = sensitiveRoutes.some((route) =>
     pathname.startsWith(route)
   );
 
-  if (isLoginPage) {
+  if (isLoginPage || isSignup) {
     if (isAuth) {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
@@ -37,5 +39,5 @@ export default withAuth(async function middleware(req) {
 });
 
 export const config = {
-  matchter: ["/", "/login", "/dashboard/:path*"],
+  matchter: ["/", "/login", "/signup", "/dashboard/:path*"],
 };
