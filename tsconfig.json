@@ -24,7 +24,8 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ]
+      ],
+      "next-auth": ["./node_modules/next-auth"]
     },
     "moduleResolution": "node"
   },

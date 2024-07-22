@@ -8,13 +8,18 @@ import { Message } from "@/lib/validations/message";
 import { pusherClient } from "@/lib/pusher";
 
 interface MessagesProps {
-  initialMessages: Message[];
+  initialMessages: NewMessage[];
   sessionId: string;
   chatId: string;
   sessionImg: string | null | undefined;
   chatPartner: User;
 }
-
+interface NewMessage {
+  id: number | any
+  senderId: number | any
+  text: string | any
+  timestamp: string | any
+}
 const Messages: FC<MessagesProps> = ({
   initialMessages,
   sessionId,
@@ -22,7 +27,7 @@ const Messages: FC<MessagesProps> = ({
   chatPartner,
   sessionImg,
 }) => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<NewMessage[]>(initialMessages);
 
   useEffect(() => {
     pusherClient.subscribe(
@@ -64,10 +69,10 @@ const Messages: FC<MessagesProps> = ({
       <div ref={scrollDownRef} />
 
       {messages.map((message, index) => {
-        const isCurrentUser = message.senderId == sessionId;
+        const isCurrentUser = message?.senderId.toString() == sessionId;
 
         const hasNextMessageFromSameUser =
-          messages[index - 1]?.senderId === messages[index].senderId;
+          messages[index - 1]?.senderId === messages[index]?.senderId;
 
         return (
           <div

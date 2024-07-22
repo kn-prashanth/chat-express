@@ -11,8 +11,14 @@ interface PageProps {
     chatId: string;
   };
 }
+interface NewMessage {
+  id: number | any
+  senderId: number | any
+  text: string | any
+  timestamp: string | any
+}
 
-async function getChatMessages(chatId: string): Promise<Message[]> {
+async function getChatMessages(chatId: string): Promise<NewMessage[]> {
   try {
     const { data, error } = await db
       .from("messages")
@@ -31,8 +37,9 @@ async function getChatMessages(chatId: string): Promise<Message[]> {
       
       notFound();
     }
-    const messages = messageArrayValidator.parse(data);
-    return messages || [];
+    // const messages = messageArrayValidator.parse(data);
+    
+    return data;
 
   } catch (error) {
     console.error("Error fetching messages:", error);
