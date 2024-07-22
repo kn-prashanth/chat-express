@@ -3,9 +3,7 @@ import Messages from "@/components/Messages";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { messageArrayValidator } from "@/lib/validations/message";
-import axios from "axios";
 import { getServerSession } from "next-auth";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 interface PageProps {
@@ -14,7 +12,7 @@ interface PageProps {
   };
 }
 
-export async function getChatMessages(chatId: string): Promise<Message[]> {
+async function getChatMessages(chatId: string): Promise<Message[]> {
   try {
     const { data, error } = await db
       .from("messages")
