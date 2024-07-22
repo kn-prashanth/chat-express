@@ -35,10 +35,7 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
       
       const shouldNotify =
         pathname !=
-        `/dashboard/chat/${chatHrefConstructor(sessionId, message.senderId)}`
-
-      console.log("pathname:", pathname);
-      console.log(`/dashboard/chat/${chatHrefConstructor(sessionId, message.senderId)}`);
+        `/dashboard/chat/${chatHrefConstructor(sessionId, message.senderId.toString())}`
     
       if (!shouldNotify) return
 
@@ -47,7 +44,7 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
         <UnseenChatToast
           t={t}
           sessionId={sessionId}
-          senderId={message.senderId}
+          senderId={message.senderId.toString()}
           senderImg=""
           senderMessage={message.text}
           senderName={message.senderName}
@@ -86,7 +83,7 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
             <a
               href={`/dashboard/chat/${chatHrefConstructor(
                 sessionId,
-                friend.id
+                friend.id.toString()
               )}`}
               className="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
             >

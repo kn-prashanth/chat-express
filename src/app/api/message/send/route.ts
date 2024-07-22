@@ -64,7 +64,7 @@ export async function POST(req: Request) {
 
     const messageData: Message = {
       id: 1,
-      senderId: session.user.id,
+      senderId: Number(session.user.id),
       text,
       timestamp,
     };

@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 
 interface FriendRequestsProps {
-  incomingFriendRequests: IncomingFriendRequest[];
+  incomingFriendRequests: User[];
   sessionId: string;
 }
 
@@ -26,7 +26,7 @@ const FriendRequests: FC<FriendRequestsProps> = ({
     )
     console.log("listening to ", `user:${sessionId}:friend_requests`)
 
-    const friendRequestHandler = async ({ senderData }) => {
+    const friendRequestHandler = async (senderData : User) => {
       setFriendRequests((prev) =>
         [senderData, ...prev]
       );

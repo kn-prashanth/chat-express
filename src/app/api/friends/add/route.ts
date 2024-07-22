@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     }
     
     if (error) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
     const idToAdd = data?.id;
 
