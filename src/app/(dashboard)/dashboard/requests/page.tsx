@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { FC } from "react";
 
-const page = async () => {
+const Page = async () => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
 
@@ -51,4 +51,4 @@ const page = async () => {
   );
 };
 
-export default page;
+export default Page;
