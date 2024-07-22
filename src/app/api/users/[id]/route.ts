@@ -1,22 +1,22 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '@/lib/db';
+// import { db } from '@/lib/db';
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query;
+// export async function GET(req: Request) {
+//   const body = await req.json();
+//   const { id } = body;
 
-  if (!id || typeof id !== 'string') {
-    return res.status(400).json({ error: 'Invalid user ID' });
-  }
-  console.log("id-->", id);
+//   if (!id || typeof id !== 'string') {
+//     return new Response("Invalid user ID", { status: 400 });
+//   }
+//   console.log("id-->", id);
   
-  const { data, error } = await db
-    .from('users')
-    .select('*')
-    .eq('id', id)
-    .single();
+//   const { data, error } = await db
+//     .from('users')
+//     .select('*')
+//     .eq('id', id)
+//     .single();
 
-  if (error) {
-    return res.status(500).json({ error: error.message });
-  }  
-  return res.status(200).json(data);
-}
+//   if (error) {
+//     return new Response(error.message, { status: 500 });
+//   }  
+//   return new Response(data, { status: 200 });
+// }

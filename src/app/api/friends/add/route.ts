@@ -22,6 +22,9 @@ export async function POST(req: Request) {
       .single();
 
     console.log("username to add data", data);
+    if (!data) {
+      return new Response("This person does not exist.", { status: 400 });
+    }
     
     if (error) {
       throw new Error(error.message);
