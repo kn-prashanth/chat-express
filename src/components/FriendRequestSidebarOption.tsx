@@ -9,7 +9,7 @@ import { FC, useEffect, useState } from "react";
 
 interface FriendRequestSidebarOptionsProps {
   sessionId: string;
-  initialUnseenRequestCount: number;
+  initialUnseenRequestCount: number | any;
 }
 
 const FriendRequestSidebarOptions: FC<FriendRequestSidebarOptionsProps> = ({
