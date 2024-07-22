@@ -33,8 +33,6 @@ const Messages: FC<MessagesProps> = ({
     pusherClient.subscribe(
       toPusherKey(`chat:${chatId}`)
     )
-    console.log("listening to ", `user:${sessionId}:friend_requests`)
-
     const messageHandler = async (message: Message) => {
       setMessages((prev) =>
         [message, ...prev]

@@ -33,10 +33,7 @@ const isFriendRequestExist = async function (
   }
   return data;
 };
-export async function sendFriendRequest(
-  senderId: string,
-  receiverId: string,
-) {
+export async function sendFriendRequest(senderId: string, receiverId: string) {
   const isFriend = await isAlreadyFriend(senderId, receiverId);
 
   console.log("isFriend", isFriend);
@@ -61,14 +58,14 @@ export async function sendFriendRequest(
   }
 
   const { data: senderData, error: error2 } = await db
-    .from('users')
-    .select('*')
-    .eq('id', senderId)
+    .from("users")
+    .select("*")
+    .eq("id", senderId)
     .single();
 
   if (error2) {
     throw new Error(error2.message);
-  }  
+  }
 
   //valid request, send friend request
 
@@ -78,6 +75,12 @@ export async function sendFriendRequest(
     {
       senderData: senderData,
     }
+  );
+
+  pusherServer.trigger(
+    toPusherKey(`user:${receiverId}:friend_requests`),
+    "new_friend",
+    {}
   );
 
   const { data, error } = await db
@@ -92,24 +95,3 @@ export async function sendFriendRequest(
     statusCode: 200,
   };
 }
-
-// type Command = "zrange" | "sismember" | "get" | "smember";
-
-// export async function fetchRedis(
-//   command: Command,
-//   ...args: (string | number)[]
-// ) {
-//   const commandUrl = `${upstashRedisRestUrl}/${command}/${args.join("/")}`;
-
-//   const response = await fetch(commandUrl, {
-//     headers: {
-//       Authorization: `Bearer ${authToken}`,
-//     },
-//     cache: "no-cache",
-//   });
-//   if (!response.ok) {
-//     throw new Error(`Error executing Redis command: ${response.statusText}`);
-//   }
-//   const data = await response.json();
-//   return data.result;
-// }

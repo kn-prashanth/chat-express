@@ -18,13 +18,13 @@ const Page: FC<pageProps> = ({}) => {
 
   const router = useRouter();
 
-  async function loginToChatExpress(username: string, password: string) {    
+  async function loginToChatExpress(username: string, password: string) {
     if (!username || !password) {
       setError("Please enter username and password");
       return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     const result = await signIn("credentials", {
       redirect: false,
@@ -37,7 +37,7 @@ const Page: FC<pageProps> = ({}) => {
       setIsLoading(false);
       return;
     }
-    router.push('/dashboard');
+    router.push("/dashboard");
   }
   return (
     <>
@@ -49,11 +49,11 @@ const Page: FC<pageProps> = ({}) => {
               Sign in to your account
             </h2>
             <p className=" text-sm text-gray-600">
-              Don't have an account?{' '}
+              Don&apos;t have an account?
               <a href="/signup" className="text-blue-500 hover:text-blue-700">
                 Sign Up
               </a>
-          </p>
+            </p>
           </div>
           <div className="w-full max-w-sm mx-auto">
             <div className="space-y-6">
@@ -78,7 +78,7 @@ const Page: FC<pageProps> = ({}) => {
               className="mt-6 max-w-sm mx-auto w-full"
               onClick={() => loginToChatExpress(username, password)}
             >
-                {isLoading ? null : "Sign in"}
+              {isLoading ? null : "Sign in"}
             </Button>
             <p className="mt-1 text-lg text-red-600 text-center">{error}</p>
           </div>
