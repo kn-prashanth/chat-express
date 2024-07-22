@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { sendFriendRequest } from "@/helpers/psql";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -48,7 +47,7 @@ export async function POST(req: Request) {
         status: 400,
       });
     }
-    const response = await sendFriendRequest(session.user.id, idToAdd, session.user.name || "")
+    const response = await sendFriendRequest(session.user.id, idToAdd)
     
     if (response) {
         return new Response(response.message, {status: response.statusCode});

@@ -63,6 +63,7 @@ export async function POST(req: Request) {
     const timestamp = new Date().toString()
 
     const messageData: Message = {
+      id: 1,
       senderId: session.user.id,
       text,
       timestamp,

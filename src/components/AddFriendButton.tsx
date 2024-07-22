@@ -23,13 +23,13 @@ const AddFriendButton: FC<AddFriendButtonProps> = ({}) => {
       const validatedUsername =  addFriendValidator.parse({username})
       await axios.post("/api/friends/add", { username: validatedUsername });
       setShowSuccessState(true);
-    } catch (error) {
+    } catch (error: z.ZodError | AxiosError) {
         if(error instanceof z.ZodError) {
           setError("username", {message: error.message})
             return
         }
         if(error instanceof AxiosError) {
-          setError('username', {message: error.response?.data})
+          setError('username', {message: error.response.data})
           return
         }
         setError('username', {message: 'Something went wrong.'})
