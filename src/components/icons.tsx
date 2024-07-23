@@ -1,4 +1,5 @@
-import { LucideProps, User, UserPlus } from "lucide-react";
+import { LucideProps, MessagesSquare, User, UserPlus } from "lucide-react";
+import { PiWechatLogoBold} from "react-icons/pi"
 
 export const Icons = {
   Logo: (props: LucideProps) => (
@@ -10,7 +11,9 @@ export const Icons = {
     </svg>
   ),
   UserPlus,
-  User
+  User,
+  Logo2: <PiWechatLogoBold/>,
+  MessagesSquare
 };
 
 export type Icon = keyof typeof Icons

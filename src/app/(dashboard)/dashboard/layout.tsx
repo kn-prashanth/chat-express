@@ -3,6 +3,7 @@ import MobileChatLayout from "@/components/MobileChatLayout";
 import SidebarChatList from "@/components/SidebarChatList";
 import SignOutButton from "@/components/SignOutButton";
 import { Icon, Icons } from "@/components/icons";
+import ProfileImage from "@/components/ui/ProfileImage";
 import { getFriendsByUserId } from "@/helpers/get-friends-by-user-id";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -11,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FC, ReactNode } from "react";
+import { PiWechatLogoBold } from "react-icons/pi";
 
 interface layoutProps {
   children: ReactNode;
@@ -63,7 +65,8 @@ const layout = async ({ children }: layoutProps) => {
       </div>
       <div className="hidden md:flex h-full w-full max-w-xs grow flex-col gap-y-5 overflow-y-auto border-r border-x-gray-200 bg-white px-6">
         <Link href="/dashboard" className="flex h-16 shrink-0 items-center">
-          <Icons.Logo className="h-8 w-auto text-indigo-600"></Icons.Logo>
+          {/* <Icons.Logo2 className="h-8 w-auto text-indigo-600"></Icons.Logo2> */}
+          <PiWechatLogoBold className="h-16 w-auto text-indigo-600"/>
         </Link>
         {friends.length > 0 ? <div className="text-xs font-semibold leading-6 text-gray-400">
           Your chats
@@ -87,7 +90,7 @@ const layout = async ({ children }: layoutProps) => {
                         className="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-3 rounder-md p-2 text-sm leadin-6 font-semibold"
                       >
                         <span className="text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
-                          <Icon className="h-4 w-4"></Icon>
+                          <Icons.UserPlus className="h-4 w-4" />
                         </span>
                         <span className="truncate">{option.name}</span>
                       </Link>

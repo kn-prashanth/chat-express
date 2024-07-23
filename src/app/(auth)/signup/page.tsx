@@ -3,6 +3,7 @@ import Button from "@/components/ui/Button";
 import axios, { AxiosError } from "axios";
 import { signIn } from "next-auth/react";
 import { FC, useState } from "react";
+import { PiWechatLogoBold } from "react-icons/pi";
 import { z } from "zod";
 
 interface pageProps {}
@@ -22,12 +23,12 @@ const Page: FC<pageProps> = ({}) => {
     if (!fullname.trim() || !username.trim() || !password.trim()) {
       setError("Please enter all the details");
       return;
-    } else if(username.length < 5) {
+    } else if (username.length < 5) {
       setError("Username must be at least 5 characters long");
-      return
-    } else if(password.length < 5) {
+      return;
+    } else if (password.length < 5) {
       setError("Password must be at least 5 characters long");
-      return
+      return;
     }
     setIsLoading(true);
     try {
@@ -70,13 +71,13 @@ const Page: FC<pageProps> = ({}) => {
       <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full flex flex-col items-center max-w-md space-y-8">
           <div className="flex flex-col items-center gap-1">
-            logo
+            <PiWechatLogoBold className="h-16 w-auto text-indigo-600" />
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
               Register your account
             </h2>
             <p className=" text-sm text-gray-600">
-              Already have an account?{' '}
-              <a href="/login" className="text-blue-500 hover:text-blue-700">
+              Already have an account?{" "}
+              <a href="/login" className="pl-1 text-blue-500 hover:text-blue-700">
                 Sign in
               </a>
             </p>

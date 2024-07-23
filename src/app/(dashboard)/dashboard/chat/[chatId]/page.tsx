@@ -1,5 +1,6 @@
 import ChatInput from "@/components/ChatInput";
 import Messages from "@/components/Messages";
+import ProfileImage from "@/components/ui/ProfileImage";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { messageArrayValidator } from "@/lib/validations/message";
@@ -88,14 +89,8 @@ const Page = async ({ params }: PageProps) => {
     <div className='flex sm:items-center justify-between py-3 border-b-2 border-gray-200'>
       <div className='relative flex items-center space-x-4'>
         <div className='relative'>
-          <div className='relative w-8 sm:w-12 h-8 sm:h-12'>
-            {/* <Image
-              fill
-              referrerPolicy='no-referrer'
-              src=""
-              alt={`${chatPartner.name} profile picture`}
-              className='rounded-full'
-            /> */}
+          <div className='relative w-8 sm:w-12 h-12 text-xl bg-gray-200 rounded-full'>
+            <ProfileImage name = {chatPartner.name}/>
           </div>
         </div>
 
@@ -114,7 +109,7 @@ const Page = async ({ params }: PageProps) => {
     <Messages
       chatId={chatId}
       chatPartner={chatPartner}
-      sessionImg=""
+      sessionUserName= {session.user.name || ""}
       sessionId={session.user.id}
       initialMessages={initialMessages}
     />

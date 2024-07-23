@@ -7,6 +7,7 @@ import { FC, useState } from "react";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { useRouter } from "next/navigation";
+import { PiWechatLogoBold } from "react-icons/pi";
 
 interface pageProps {}
 
@@ -44,13 +45,13 @@ const Page: FC<pageProps> = ({}) => {
       <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full flex flex-col items-center max-w-md space-y-8">
           <div className="flex flex-col items-center gap-1">
-            logo
+          <PiWechatLogoBold className="h-16 w-auto text-indigo-600"/>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
               Sign in to your account
             </h2>
             <p className=" text-sm text-gray-600">
               Don&apos;t have an account?
-              <a href="/signup" className="text-blue-500 hover:text-blue-700">
+              <a href="/signup" className="pl-1 text-blue-500 hover:text-blue-700">
                 Sign Up
               </a>
             </p>
